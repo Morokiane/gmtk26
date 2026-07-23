@@ -12,7 +12,7 @@ extends Node2D
 var spawnEnemies: bool = true
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	pass # Replace with function body. blah
 
 func _on_timer_timeout() -> void:
 	SpawnEnemy()
