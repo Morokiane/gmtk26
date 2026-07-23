@@ -56,7 +56,7 @@ func Damage() -> void:
 		formatString = "%0.0f"
 	instance.Start(str(formatString % player.damage))
 	
-	position.x = position.x + knockback
+	position.x = position.x + player.knockbackAmount
 	health -= player.damage
 	anim.play("Hit")
 	print("Health: ", health)

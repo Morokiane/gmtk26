@@ -13,8 +13,19 @@ class_name HUDController
 @onready var critChance: TextureButton = $GridContainer/CritChance
 @onready var critDamage: TextureButton = $GridContainer/CritDamage
 @onready var blockChance: TextureButton = $GridContainer/BlockChance
+@onready var knockback: TextureButton = $GridContainer/Knockback
 
-@onready var upgradeButtons: Array[TextureButton] = [increaseHealth, increaseMana, healthRegen, increaseDamage, attackRate, critChance, critDamage, blockChance]
+@onready var upgradeButtons: Dictionary = {
+	"health": increaseHealth, 
+	"mana": increaseMana,
+	"healthRe`gen": healthRegen,
+	"damage": increaseDamage,
+	"attackRate": attackRate,
+	"critChance": critChance,
+	"critDamage": critDamage,
+	"blockChance": blockChance,
+	"knockback": knockback
+}
 
 func _ready() -> void:
 	for button in upgradeButtons:
@@ -48,6 +59,9 @@ func _on_crit_damage_mouse_entered() -> void:
 	
 func _on_block_chance_mouse_entered() -> void:
 	description.text = "Block Chance"
+
+func _on_knockback_mouse_entered() -> void:
+	description.text = "Increase Knockback"
 	
 func _mouse_exited() -> void:
 	description.text = ""
@@ -83,8 +97,13 @@ func _on_crit_damage_pressed() -> void:
 func _on_block_chance_pressed() -> void:
 	player.blockChance += 0.1
 	levelController.IncreaseXPLevel()
-	
+
+func _on_knockback_pressed() -> void:
+	player.knockbackAmount += 1
+	levelController.IncreaseXPLevel()
+
 func EnableUpgrade() -> void:
-	var can_upgrade: bool = levelController.xp >= levelController.nextXP
-	for button in upgradeButtons:
-		button.disabled = not can_upgrade
+	var hasXP: bool = levelController.xp >= levelController.nextXP
+	for ability in upgradeButtons:
+		var button: TextureButton = upgradeButtons[ability]
+		button.disabled = levelController.is_maxed(ability) or not hasXP

@@ -8,6 +8,30 @@ var xp: int = 0
 var nextXP: int = 5
 var growthRate: float = 1.5
 
+var abilityLevels: Dictionary = {
+	"health": 0,
+	"mana": 0,
+	"healthRegen": 0,
+	"damage": 0,
+	"attackRate": 0,
+	"critChance": 0,
+	"critDamage": 0,
+	"blockChance": 0,
+	"knockback": 0
+}
+
+var maxLevels: Dictionary = {
+	"health": -1,
+	"mana": -1,
+	"healthRegen": 10,
+	"damage": 20,
+	"attackRate": 20,
+	"critChance": 20,
+	"critDamage": 20,
+	"blockChance": 20,
+	"knockback": 20
+}
+
 #@export var maxHealth: int = 100
 #@export var maxMana: int = 30
 #@export var attackRate: float
@@ -31,3 +55,11 @@ func IncreaseXPLevel() -> void:
 	nextXP = int(nextXP * growthRate)
 	print("XP: ", xp, " Next XP: ", nextXP, " Player level: ", player.level)
 	xpChange.emit()
+	
+func IsMaxed(ability: String) -> bool:
+	var cap = maxLevels[ability]
+	return cap != -1 && abilityLevels[ability] >= cap
+
+func LevelUp(ability: String) -> void:
+	abilityLevels[ability] += 1
+	IncreaseXPLevel()
