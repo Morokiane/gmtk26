@@ -1,5 +1,13 @@
 extends Node
 
+signal xpChange
+
+@onready var player: Player = get_tree().get_first_node_in_group("player")
+
+var xp: int = 0
+var nextXP: int = 5
+var growthRate: float = 1.5
+
 #@export var maxHealth: int = 100
 #@export var maxMana: int = 30
 #@export var attackRate: float
@@ -14,11 +22,12 @@ extends Node
 @export var enemyLevel: int
 @export var playerLevel: int
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func AddXP(amount: int) -> void:
+	xp += amount
+	xpChange.emit()
+	
+func IncreaseXPLevel() -> void:
+	player.level += 1
+	nextXP = int(nextXP * growthRate)
+	print("XP: ", xp, " Next XP: ", nextXP, " Player level: ", player.level)
+	xpChange.emit()

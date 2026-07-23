@@ -11,13 +11,17 @@ class_name Player
 @export var moveSpeed: float
 @export var critChance: float
 @export var critDamage: float
-@export var healthRegen: int
-@export var damage: int
+@export var healthRegen: float
+@export var damage: float
 @export var armureMitigation: int
+@export var blockChance: float
 @export var knockbackAmount: int
 
 var currentHealth: int
 var canAttack: bool = true
+var level: int = 0
+var xp: int
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	add_to_group("player")

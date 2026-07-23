@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://t6tnxlo7g1yn"
-path="res://.godot/imported/Button.png-f5ec53d15ff9d1d69ece0f4de7290888.ctex"
+uid="uid://dspd8t0iwn02q"
+path="res://.godot/imported/IncreaseHealthDisabled.png-64f47446f868ff34f6a2fed81f1ae888.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Graphics/HUD/Button.png"
-dest_files=["res://.godot/imported/Button.png-f5ec53d15ff9d1d69ece0f4de7290888.ctex"]
+source_file="res://Graphics/HUD/IncreaseHealthDisabled.png"
+dest_files=["res://.godot/imported/IncreaseHealthDisabled.png-64f47446f868ff34f6a2fed81f1ae888.ctex"]
 
 [params]
 
