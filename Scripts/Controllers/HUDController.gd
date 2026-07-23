@@ -18,7 +18,7 @@ class_name HUDController
 @onready var upgradeButtons: Dictionary = {
 	"health": increaseHealth, 
 	"mana": increaseMana,
-	"healthRe`gen": healthRegen,
+	"healthRegen": healthRegen,
 	"damage": increaseDamage,
 	"attackRate": attackRate,
 	"critChance": critChance,
@@ -28,7 +28,7 @@ class_name HUDController
 }
 
 func _ready() -> void:
-	for button in upgradeButtons:
+	for button in upgradeButtons.values():
 		button.disabled = true
 	
 	levelController.xpChange.connect(EnableUpgrade)
@@ -106,4 +106,4 @@ func EnableUpgrade() -> void:
 	var hasXP: bool = levelController.xp >= levelController.nextXP
 	for ability in upgradeButtons:
 		var button: TextureButton = upgradeButtons[ability]
-		button.disabled = levelController.is_maxed(ability) or not hasXP
+		button.disabled = levelController.IsMaxed(ability) or not hasXP
