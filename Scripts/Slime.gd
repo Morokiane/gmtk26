@@ -7,9 +7,16 @@ extends CharacterBody2D
 @onready var hud: HUDController = get_tree().get_first_node_in_group("hud")
 @onready var levelController: Node = get_tree().get_first_node_in_group("level")
 
-@export var health: float = 1
-@export var  moveSpeed: float = 20.0
-@export var xp: int = 1
+@export var baseHealth: float = 2.0
+@export var baseDamage: float = 1.0
+@export var baseMove: float = 20.0
+@export var growthRate: float = 1.05
+
+var health: float
+var damage: float
+var enemyLevel: int = 0
+var  moveSpeed: float
+var xp: int = 1
 
 var direction: Vector2 = Vector2.LEFT
 var canMove: bool = true
@@ -18,6 +25,10 @@ const floatingText: PackedScene = preload("res://Scenes/Utils/FloatingText.scn")
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+func _ready() -> void:
+	SetLevel(player.level)
+	print("Enemy Level: ", enemyLevel)
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -30,6 +41,12 @@ func _physics_process(delta: float) -> void:
 	if canMove:
 		move_and_slide()
 		
+func SetLevel(level: int) -> void:
+	enemyLevel = level
+	health = baseHealth * pow(growthRate, enemyLevel)
+	damage = baseDamage * pow(growthRate, enemyLevel)
+	moveSpeed = baseMove * pow(growthRate, enemyLevel)
+
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("playerHitbox"):
 		canMove = false
@@ -42,17 +59,21 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		Damage()
 		
 func Damage() -> void:
+	var result: Dictionary = player.CalculateDamage()
+	var dmg: float = result["amount"]
+	var isCrit: bool = result["isCrit"]
+	
 	var instance: Node2D = floatingText.instantiate()
 	get_tree().get_first_node_in_group("foreground").add_child(instance)
 	instance.global_position = global_position + (Vector2.UP * 16)
 	
 	var formatString: String = "%0.1f"
-	if round(player.damage) == player.damage:
+	if round(dmg) == dmg:
 		formatString = "%0.0f"
-	instance.Start(str(formatString % player.damage))
+	instance.Start(str(formatString % dmg), isCrit)
 	
 	position.x = position.x + player.knockbackAmount
-	health -= player.damage
+	health -= dmg
 	anim.play("Hit")
 	
 	if health <= 0:

@@ -44,6 +44,18 @@ func Damage() -> void:
 	
 	if currentHealth <= 0:
 		Kill()
+		
+func CalculateDamage() -> Dictionary:
+	var isCrit: bool = randf() * 100.0 < critChance
+	var finalDamage: float = damage
+	
+	if isCrit:
+		finalDamage *= 1.0 + (critDamage / 100.0)
+	
+	return {
+		"amount": finalDamage,
+		"isCrit": isCrit
+	}
 
 func Kill() -> void:
 	anim.play("Death")

@@ -1,12 +1,14 @@
 extends Node
 
 signal xpChange
+signal upgradePointsChanged
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 
 var xp: int = 0
 var nextXP: int = 5
 var growthRate: float = 1.5
+var upgradePoints: int = 0
 
 var abilityLevels: Dictionary = {
 	"health": 0,
@@ -50,16 +52,29 @@ func AddXP(amount: int) -> void:
 	xp += amount
 	xpChange.emit()
 	
-func IncreaseXPLevel() -> void:
+	if xp >= nextXP:
+		PlayerLevelUp()
+	
+func PlayerLevelUp() -> void:
 	player.level += 1
+	xp = 0
 	nextXP = int(nextXP * growthRate)
-	# print("XP: ", xp, " Next XP: ", nextXP, " Player level: ", player.level)
+	upgradePoints += 1
 	xpChange.emit()
+	upgradePointsChanged.emit()
+
+func UpgradeAbility(ability: String) -> void:
+	abilityLevels[ability] += 1
+	upgradePoints -= 1
+	upgradePointsChanged.emit()
+	
+#func IncreaseXPLevel() -> void:
+#	player.level += 1
+#	xp = 0
+#	nextXP = int(nextXP * growthRate)
+#	# print("XP: ", xp, " Next XP: ", nextXP, " Player level: ", player.level)
+#	xpChange.emit()
 	
 func IsMaxed(ability: String) -> bool:
 	var cap = maxLevels[ability]
 	return cap != -1 && abilityLevels[ability] >= cap
-
-func LevelUp(ability: String) -> void:
-	abilityLevels[ability] += 1
-	IncreaseXPLevel()

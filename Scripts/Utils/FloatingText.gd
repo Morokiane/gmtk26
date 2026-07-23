@@ -1,7 +1,14 @@
 extends Node2D
 
-func Start(text: String) -> void:
+func Start(text: String, isCrit: bool = false) -> void:
 	$Label.text = text
+	
+	var randomOffset: Vector2 = Vector2(randf_range(-8.0, 8.0), randf_range(-4.0, 4.0))
+	global_position += randomOffset
+	
+	if isCrit:
+		$Label.modulate = Color.ORANGE
+		$Label.scale *= 1.3
 	
 	var tween: Tween = create_tween()
 	tween.set_parallel()

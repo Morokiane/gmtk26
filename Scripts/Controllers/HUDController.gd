@@ -18,6 +18,7 @@ class_name HUDController
 @onready var critDamage: TextureButton = $GridContainer/CritDamage
 @onready var blockChance: TextureButton = $GridContainer/BlockChance
 @onready var knockback: TextureButton = $GridContainer/Knockback
+@onready var xpBar: ProgressBar = $VBoxContainer/ProgressBar
 
 @onready var upgradeButtons: Dictionary = {
 	"health": increaseHealth, 
@@ -36,14 +37,16 @@ func _ready() -> void:
 		button.disabled = true
 	
 	levelController.xpChange.connect(EnableUpgrade)
+	levelController.xpChange.connect(OnXPChanged)
 	EnableUpgrade()
+	OnXPChanged()
 	
 	description.text = ""
 
-func _process(delta: float) -> void:
+func OnXPChanged() -> void:
 	xpNum.text = str(levelController.xp)
-	damageNum.text = str(player.damage)
-	regenNum.text = str(player.healthRegen)
+	xpBar.max_value = levelController.nextXP
+	xpBar.value = levelController.xp
 	
 func _on_increase_health_mouse_entered() -> void:
 	description.text = "Increase Health"
@@ -77,42 +80,45 @@ func _mouse_exited() -> void:
 
 func _on_increase_health_pressed() -> void:
 	player.maxHealth += 1
-	levelController.IncreaseXPLevel()
+	levelController.UpgradeAbility("health")
 	
 func _on_increase_mana_pressed() -> void:
 	player.maxMana += 1
-	levelController.IncreaseXPLevel()
+	levelController.UpgradeAbility("mana")
 	
 func _on_health_regen_pressed() -> void:
 	player.healthRegen += 0.1
-	levelController.IncreaseXPLevel()
+	regenNum.text = str(player.healthRegen)
+	levelController.UpgradeAbility("healthRegen")
 	
 func _on_increase_damage_pressed() -> void:
 	player.damage += 0.1
-	levelController.IncreaseXPLevel()
+	damageNum.text = str(player.damage)
+	levelController.UpgradeAbility("damage")
 	
 func _on_attack_rate_pressed() -> void:
 	player.attackRate += 0.1
-	levelController.IncreaseXPLevel()
+	levelController.UpgradeAbility("attackRate")
 	
 func _on_crit_chance_pressed() -> void:
 	player.critChance += 0.1
-	levelController.IncreaseXPLevel()
+	levelController.UpgradeAbility("critChance")
 	
 func _on_crit_damage_pressed() -> void:
 	player.critDamage += 0.1
-	levelController.IncreaseXPLevel()
+	levelController.UpgradeAbility("critDamage")
 	
 func _on_block_chance_pressed() -> void:
 	player.blockChance += 0.1
-	levelController.IncreaseXPLevel()
+	levelController.UpgradeAbility("blockChance")
 
 func _on_knockback_pressed() -> void:
 	player.knockbackAmount += 1
-	levelController.IncreaseXPLevel()
+	levelController.UpgradeAbility("knockback")
 
 func EnableUpgrade() -> void:
-	var hasXP: bool = levelController.xp >= levelController.nextXP
+	var hasPoints: bool = levelController.upgradePoints > 0
+#	var hasXP: bool = levelController.xp >= levelController.nextXP
 	for ability in upgradeButtons:
 		var button: TextureButton = upgradeButtons[ability]
-		button.disabled = levelController.IsMaxed(ability) or not hasXP
+		button.disabled = levelController.IsMaxed(ability) or not hasPoints

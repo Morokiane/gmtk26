@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var player: Player = get_tree().get_first_node_in_group("player")
+
 @export var enemyUn: PackedScene
 @export var enemyDeux: PackedScene
 @export var enemyTrois: PackedScene
@@ -29,3 +31,4 @@ func SpawnEnemy() -> void:
 			
 #		instance.position = spawn_position
 		add_child(instance)
+		instance.SetLevel(player.level)
