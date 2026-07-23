@@ -12,6 +12,7 @@ extends Node
 @export var enemyDamage: int = 5
 @export var spawnTime: float
 @export var enemyLevel: int
+@export var playerLevel: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

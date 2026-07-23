@@ -7,12 +7,13 @@ extends Node2D
 @export var enemyCinq: PackedScene
 @export var enemySix: PackedScene
 
+@onready var levelController: Node = get_parent()
 @onready var timer: Timer = $Timer
 
 var spawnEnemies: bool = true
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body. blah
+	pass # Replace with function body.
 
 func _on_timer_timeout() -> void:
 	SpawnEnemy()
@@ -22,7 +23,8 @@ func SpawnEnemy() -> void:
 	if spawnEnemies:
 		var instance: CharacterBody2D = enemyUn.instantiate()
 
-#		if GameController.enemyLevel >= 10:
+		if levelController.playerLevel >= 10:
+			pass
 #			instance = redBee.instantiate()
 			
 #		instance.position = spawn_position
