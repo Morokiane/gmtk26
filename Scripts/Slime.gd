@@ -7,7 +7,7 @@ extends CharacterBody2D
 @onready var hud: HUDController = get_tree().get_first_node_in_group("hud")
 @onready var levelController: Node = get_tree().get_first_node_in_group("level")
 
-@export var health: int = 1
+@export var health: float = 1
 @export var  moveSpeed: float = 20.0
 @export var xp: int = 1
 
@@ -18,11 +18,6 @@ const floatingText: PackedScene = preload("res://Scenes/Utils/FloatingText.scn")
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
-
-func _ready() -> void:
-	print("Player health: ", player.currentHealth)
-	if hud != null:
-		print("found hud")
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -59,7 +54,6 @@ func Damage() -> void:
 	position.x = position.x + player.knockbackAmount
 	health -= player.damage
 	anim.play("Hit")
-	print("Health: ", health)
 	
 	if health <= 0:
 		Kill()

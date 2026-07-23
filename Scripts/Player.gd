@@ -1,9 +1,10 @@
 extends Node2D
 class_name Player
 
+@onready var levelController: Node = get_parent()
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var hitboxCol: CollisionShape2D = $Hitbox/CollisionShape2D
-@onready var levelController: Node = get_parent()
+@onready var regenTimer: Timer = $RegenTimer
 
 @export var maxHealth: int = 100
 @export var maxMana: int = 30
@@ -28,8 +29,6 @@ func _ready() -> void:
 	currentHealth = maxHealth
 	hitboxCol.disabled = true
 	
-	print(levelController.enemyDamage)
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta: float) -> void:
 #	pass
@@ -48,3 +47,6 @@ func Damage() -> void:
 
 func Kill() -> void:
 	anim.play("Death")
+
+func _on_regen_timer_timeout() -> void:
+	print("Regen timer working")

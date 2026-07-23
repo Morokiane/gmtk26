@@ -53,7 +53,7 @@ func AddXP(amount: int) -> void:
 func IncreaseXPLevel() -> void:
 	player.level += 1
 	nextXP = int(nextXP * growthRate)
-	print("XP: ", xp, " Next XP: ", nextXP, " Player level: ", player.level)
+	# print("XP: ", xp, " Next XP: ", nextXP, " Player level: ", player.level)
 	xpChange.emit()
 	
 func IsMaxed(ability: String) -> bool:

@@ -31,11 +31,9 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 		timer.start()
 		canMove = false
 		anim.play("Idle")
-		print("found the player")
 		
 func _on_timer_timeout() -> void:
 	anim.play("Attack 1")
-	print(timer.wait_time)
 	
 func Idle() -> void:
 	anim.play("Idle")

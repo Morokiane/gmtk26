@@ -5,6 +5,10 @@ class_name HUDController
 @onready var levelController: Node = get_parent()
 
 @onready var description: Label = $DescriptionLabel
+@onready var xpNum: Label = $VBoxContainer/XP/Num
+@onready var damageNum: Label = $VBoxContainer/Damage/Num
+@onready var regenNum: Label = $VBoxContainer/HealthRegen/Num
+@onready var goldNum: Label = $VBoxContainer/Gold/Num
 @onready var increaseHealth: TextureButton = $GridContainer/IncreaseHealth
 @onready var increaseMana: TextureButton = $GridContainer/IncreaseMana
 @onready var healthRegen: TextureButton = $GridContainer/HealthRegen
@@ -35,6 +39,11 @@ func _ready() -> void:
 	EnableUpgrade()
 	
 	description.text = ""
+
+func _process(delta: float) -> void:
+	xpNum.text = str(levelController.xp)
+	damageNum.text = str(player.damage)
+	regenNum.text = str(player.healthRegen)
 	
 func _on_increase_health_mouse_entered() -> void:
 	description.text = "Increase Health"
