@@ -10,13 +10,16 @@ extends CharacterBody2D
 @export var baseHealth: float = 2.0
 @export var baseDamage: float = 1.0
 @export var baseMove: float = 20.0
+@export var healthGrowthRate: float = 1.1
+@export var damageGrowthRate: float = 1.1
+@export var moveGrowthRate: float = 1.2
 @export var growthRate: float = 1.05
+@export var xp: int = 1
 
 var health: float
 var damage: float
 var enemyLevel: int = 0
-var  moveSpeed: float
-var xp: int = 1
+var moveSpeed: float
 
 var direction: Vector2 = Vector2.LEFT
 var canMove: bool = true
@@ -27,8 +30,10 @@ const floatingText: PackedScene = preload("res://Scenes/Utils/FloatingText.scn")
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready() -> void:
+	health = baseHealth
 	SetLevel(player.level)
-	print("Enemy Level: ", enemyLevel)
+	# print("Enemy Level: ", enemyLevel)
+
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -40,23 +45,29 @@ func _physics_process(delta: float) -> void:
 
 	if canMove:
 		move_and_slide()
+
 		
 func SetLevel(level: int) -> void:
 	enemyLevel = level
-	health = baseHealth * pow(growthRate, enemyLevel)
-	damage = baseDamage * pow(growthRate, enemyLevel)
-	moveSpeed = baseMove * pow(growthRate, enemyLevel)
+	if (enemyLevel > 5):
+		health = baseHealth * pow(healthGrowthRate, enemyLevel)
+
+	damage = baseDamage * pow(damageGrowthRate, enemyLevel)
+	moveSpeed = baseMove * pow(moveGrowthRate, enemyLevel)
+
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("playerHitbox"):
 		canMove = false
 		anim.play("Explode")
+
 		
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 #	print("Hurtbox detected: ", area.name, " groups: ", area.get_groups())
 	if area.is_in_group("attack"):
 #		print("Should damage enemy")
 		Damage()
+
 		
 func Damage() -> void:
 	var result: Dictionary = player.CalculateDamage()
@@ -70,8 +81,8 @@ func Damage() -> void:
 	var formatString: String = "%0.1f"
 	if round(dmg) == dmg:
 		formatString = "%0.0f"
+
 	instance.Start(str(formatString % dmg), isCrit)
-	
 	position.x = position.x + player.knockbackAmount
 	health -= dmg
 	anim.play("Hit")
@@ -79,12 +90,17 @@ func Damage() -> void:
 	if health <= 0:
 		Kill()
 
+
 func _on_hurtbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("attack"):
 		Damage()
-		
+
+
+# This should run from the end of the Hit animation
 func ResetAnimation() -> void:
+	canMove = true
 	anim.play("Move")
+	
 	
 func Kill() -> void:
 	levelController.AddXP(xp)

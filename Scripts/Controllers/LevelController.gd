@@ -54,14 +54,17 @@ func AddXP(amount: int) -> void:
 	
 	if xp >= nextXP:
 		PlayerLevelUp()
+		
 	
 func PlayerLevelUp() -> void:
 	player.level += 1
 	xp = 0
 	nextXP = int(nextXP * growthRate)
 	upgradePoints += 1
+	print("Upgrade Points:", upgradePoints)
 	xpChange.emit()
 	upgradePointsChanged.emit()
+
 
 func UpgradeAbility(ability: String) -> void:
 	abilityLevels[ability] += 1
