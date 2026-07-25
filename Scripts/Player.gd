@@ -42,7 +42,7 @@ func _ready() -> void:
 #	pass
 
 func _physics_process(_delta: float) -> void:
-	var wasInRange = enemyInRange
+	var wasInRange: bool = enemyInRange
 	enemyInRange = false
 
 	if rayCast.is_colliding():
@@ -70,6 +70,7 @@ func Damage() -> void:
 	currentHealth -= levelController.enemyDamage
 	anim.play("Hit")
 	print("Player health:", currentHealth)
+	# SoundFx.play("playerhit")
 	# Emit health change to the HUDController
 	healthChanged.emit()
 	
@@ -92,6 +93,7 @@ func CalculateDamage() -> Dictionary:
 
 
 func Kill() -> void:
+	SoundFx.play("death")
 	regenTimer.stop()
 	attackTimer.stop()
 	anim.play("Death")

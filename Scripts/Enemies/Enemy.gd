@@ -85,6 +85,8 @@ func Damage() -> void:
 	get_tree().get_first_node_in_group("foreground").add_child(instance)
 	instance.global_position = global_position + (Vector2.UP * 16)
 	
+	SoundFx.play("hurt")
+	
 	var formatString: String = "%0.1f"
 	if round(dmg) == dmg:
 		formatString = "%0.0f"
@@ -95,8 +97,8 @@ func Damage() -> void:
 		position.x = position.x + player.knockbackAmount
 	else:
 		knockbackResist -= 1
-		anim.play("Hit")
 
+	anim.play("Hit")
 	health -= dmg
 	
 	if health <= 0:
@@ -111,6 +113,11 @@ func _on_hurtbox_body_entered(body: Node2D) -> void:
 
 # This should run from the end of the Hit animation
 func ResetAnimation() -> void:
+	canMove = true
+	anim.play("Move")
+
+
+func ResetAnimationKnockback() -> void:
 	if knockbackResist <= 0 && !attacking:
 		canMove = true
 		anim.play("Move")
@@ -120,6 +127,7 @@ func ResetAnimation() -> void:
 	
 func Kill() -> void:
 	# lastPosition = self.position
+	SoundFx.play("enemydie")
 	canMove = false
 	Explosion()
 	anim.play("Death")
@@ -130,3 +138,7 @@ func Explosion() -> void:
 	get_parent().add_child(explode)
 	explode.global_position = blood.global_position
 	explode.emitting = true
+
+
+func SelfDestruct() -> void:
+	SoundFx.play("explosion")

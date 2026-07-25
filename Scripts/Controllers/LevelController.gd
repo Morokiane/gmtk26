@@ -3,7 +3,9 @@ extends Node
 signal xpChange
 signal upgradePointsChanged
 
+const levelUp: PackedScene = preload("res://Scenes/VFX/LevelUp.scn")
 @onready var player: Player = get_tree().get_first_node_in_group("player")
+
 @onready var gameOver: Label = $GameOver
 @onready var quest: Label = $Quest
 
@@ -52,6 +54,11 @@ func AddXP(amount: int) -> void:
 
 	
 func PlayerLevelUp() -> void:
+	var instance: Node2D = levelUp.instantiate()
+	get_tree().get_first_node_in_group("foreground").add_child(instance)
+	instance.global_position = player.global_position
+
+	SoundFx.play("tingle")
 	player.level += 1
 	xp = 0
 	nextXP = int(nextXP * growthRate)

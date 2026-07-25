@@ -8,6 +8,7 @@ func _on_timer_timeout() -> void:
 
 
 func Idle() -> void:
+	print("Going to idle")
 	anim.play("Idle")
 
 

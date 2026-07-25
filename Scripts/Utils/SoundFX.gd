@@ -1,9 +1,9 @@
 extends Node
-var soundPath = "res://SFX/"
+var soundPath: String = "res://SFX/"
 
 @onready var soundPlayers = get_children()
 
-var sounds = {
+var sounds: Dictionary = {
 	"enemydie" : load(soundPath + "EnemyDie.wav"),
 	"hurt" : load(soundPath + "Hurt.wav"),
 	"jump" : load(soundPath + "Jump.wav"),
@@ -58,14 +58,14 @@ var sounds = {
 	# "shopBG" : load (soundPath + "ShopBG.mp3")
 }
 
-func play(soundString):
+func play(soundString) -> void:
 	for soundPlayer in soundPlayers:
 		if not soundPlayer.playing:
 			soundPlayer.stream = sounds[soundString]
 			soundPlayer.play()
 			return
 
-func stop(soundString):
+func stop(soundString) -> void:
 	for soundPlayer in soundPlayers:
 		if soundPlayer.playing:
 			soundPlayer.stream = sounds[soundString]
