@@ -11,11 +11,21 @@ extends Node2D
 
 @export var spawnTime: float = 10
 
+@export var enemiesPerHorde: int = 10
+@export var hordeCount: int = 5
+
 @onready var levelController: Node = get_parent()
 @onready var timer: Timer = $Timer
 
 var spawnEnemies: bool = true
 var enemyUnlocks: Array = []
+
+var currentHorde: int = 0
+var enemiesSpawnedThisHorde: int = 0
+var enemiesAlive: int = 0
+
+signal hordeCleared(hordeNumber: int)
+signal all_hordes_cleared
 
 func _ready() -> void:
 	timer.wait_time = spawnTime
@@ -30,20 +40,48 @@ func _ready() -> void:
 		{"level": 25, "scene": enemySix, "weight": 2},
 	]
 
+	currentHorde = 1
+	timer.start()
+
 
 func _on_timer_timeout() -> void:
 	if spawnEnemies:
 		SpawnEnemy()
 
-	
+
 func SpawnEnemy() -> void:
 	var scene: PackedScene = PickEnemy(player.level)
 	if scene == null:
 		return
 
 	var enemy = scene.instantiate()
-	# enemy.position = position
 	add_child(enemy)
+
+	enemiesSpawnedThisHorde += 1
+	enemiesAlive += 1
+	enemy.tree_exiting.connect(_on_enemy_tree_exiting)
+
+	if enemiesSpawnedThisHorde >= enemiesPerHorde:
+		spawnEnemies = false
+
+
+func _on_enemy_tree_exiting() -> void:
+	enemiesAlive -= 1
+
+	if enemiesAlive <= 0 and enemiesSpawnedThisHorde >= enemiesPerHorde:
+		HordeCleared()
+
+
+func HordeCleared() -> void:
+	hordeCleared.emit(currentHorde)
+
+	if currentHorde >= hordeCount:
+		all_hordes_cleared.emit()
+		return
+
+	currentHorde += 1
+	enemiesSpawnedThisHorde = 0
+	spawnEnemies = true
 
 
 func PickEnemy(level: int) -> PackedScene:
@@ -65,16 +103,5 @@ func PickEnemy(level: int) -> PackedScene:
 		cumulative += entry["weight"]
 		if roll < cumulative:
 			return entry["scene"]
-	
+
 	return unlocked.back()["scene"]
-
-
-# func GetEnemySceneForLevel(level: int) -> PackedScene:
-# 	var chosen: PackedScene = null
-# 	for entry in enemyUnlocks:
-# 		if level >= entry["level"]:
-# 			chosen = entry["scene"]
-# 		else:
-# 			break
-
-# 	return chosen

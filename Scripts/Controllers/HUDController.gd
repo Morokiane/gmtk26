@@ -2,6 +2,7 @@ extends Node
 class_name HUDController
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
+@onready var spawner: Node2D = get_tree().get_first_node_in_group("spawner")
 @onready var levelController: Node = get_parent()
 
 # Stats
@@ -36,6 +37,8 @@ class_name HUDController
 @onready var xpBar: TextureProgressBar = $XPBar
 @onready var hpBar: TextureProgressBar = $HPBar
 
+@onready var hordesLeft: Label = $HordesLeft/Num
+
 @onready var upgradeButtons: Dictionary = {
 	"health": increaseHealth, 
 	"mana": increaseMana,
@@ -49,6 +52,7 @@ class_name HUDController
 }
 
 func _ready() -> void:
+	hordesLeft.text = str(levelController.hordesLeft)
 	levelNum.text = str(player.level)
 	regenNum.text = str(player.healthRegen)
 	damageNum.text = str(player.damage)
@@ -57,7 +61,8 @@ func _ready() -> void:
 
 	for button in upgradeButtons.values():
 		button.disabled = true
-	
+
+	spawner.hordeCleared.connect(_on_horde_cleared)
 	levelController.xpChange.connect(EnableUpgrade)
 	levelController.xpChange.connect(OnXPChanged)
 	levelController.upgradePointsChanged.connect(EnableUpgrade)
@@ -65,8 +70,17 @@ func _ready() -> void:
 	OnHealthChanged()
 	EnableUpgrade()
 	OnXPChanged()
+	UpdateHordesLeft(spawner.hordeCount)
 	
 	description.text = ""
+
+
+func _on_horde_cleared(hordeNumber: int) -> void:
+	UpdateHordesLeft(spawner.hordeCount - hordeNumber)
+
+
+func UpdateHordesLeft(amount: int) -> void:
+	hordesLeft.text = str(amount)
 
 
 func OnHealthChanged() -> void:

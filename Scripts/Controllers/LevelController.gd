@@ -35,19 +35,11 @@ var maxLevels: Dictionary = {
 	"knockback": 20
 }
 
-#@export var maxHealth: int = 100
-#@export var maxMana: int = 30
-#@export var attackRate: float
-#@export var moveSpeed: float
-#@export var critChance: float
-#@export var critDamage: float
-#@export var healthRegen: int
-#@export var damage: int
-#@export var armureMitigation: int
 @export var enemyDamage: int = 5
 @export var spawnTime: float
 @export var enemyLevel: int
 @export var playerLevel: int
+@export var hordesLeft: int
 
 func AddXP(amount: int) -> void:
 	xp += amount
@@ -82,3 +74,7 @@ func UpgradeAbility(ability: String) -> void:
 func IsMaxed(ability: String) -> bool:
 	var cap = maxLevels[ability]
 	return cap != -1 && abilityLevels[ability] >= cap
+
+func _on_area_2d_area_entered(area: Area2D) -> void:
+	if area.is_in_group("enemy"):
+		queue_free()
