@@ -149,8 +149,8 @@ func _on_increase_mana_pressed() -> void:
 
 	
 func _on_health_regen_pressed() -> void:
-	player.regenTimer.start()
 	player.regenTimer.wait_time -= 1.0
+	player.regenTimer.start()
 	regenNum.text = str(player.healthRegen)
 	levelController.UpgradeAbility("healthRegen")
 	healthRegenLevel.text = str(levelController.abilityLevels["healthRegen"])
@@ -170,13 +170,13 @@ func _on_attack_rate_pressed() -> void:
 
 	
 func _on_crit_chance_pressed() -> void:
-	player.critChance += 0.1
+	player.critChance += 5.0
 	levelController.UpgradeAbility("critChance")
 	critChanceLevel.text = str(levelController.abilityLevels["critChance"])
 
 	
 func _on_crit_damage_pressed() -> void:
-	player.critDamage += 0.1
+	player.critDamage += 10.0
 	levelController.UpgradeAbility("critDamage")
 	critDamageLevel.text = str(levelController.abilityLevels["critDamage"])
 

@@ -96,7 +96,8 @@ func Kill() -> void:
 
 
 func _on_regen_timer_timeout() -> void:
-	currentHealth += healthRegen
+	currentHealth = min(currentHealth + healthRegen, maxHealth)
+	healthChanged.emit()
 
 
 func _on_attack_timer_timeout() -> void:

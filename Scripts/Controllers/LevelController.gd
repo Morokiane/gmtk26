@@ -4,7 +4,13 @@ signal xpChange
 signal upgradePointsChanged
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
-@onready var quest: Label = $Label
+@onready var quest: Label = $Quest
+
+@export var enemyDamage: int = 5
+@export var spawnTime: float
+@export var enemyLevel: int
+@export var playerLevel: int
+@export var hordesLeft: int
 
 var xp: int = 0
 var nextXP: int = 5
@@ -34,12 +40,6 @@ var maxLevels: Dictionary = {
 	"blockChance": 20,
 	"knockback": 20
 }
-
-@export var enemyDamage: int = 5
-@export var spawnTime: float
-@export var enemyLevel: int
-@export var playerLevel: int
-@export var hordesLeft: int
 
 func AddXP(amount: int) -> void:
 	xp += amount
@@ -75,6 +75,7 @@ func IsMaxed(ability: String) -> bool:
 	var cap = maxLevels[ability]
 	return cap != -1 && abilityLevels[ability] >= cap
 
+
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	if area.is_in_group("enemy"):
-		queue_free()
+		area.get_parent().queue_free()

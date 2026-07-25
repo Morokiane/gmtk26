@@ -70,7 +70,6 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 
 		
 func Damage() -> void:
-	print("Bat took damage, health before: ", health)
 	var result: Dictionary = player.CalculateDamage()
 	var dmg: float = result["amount"]
 	var isCrit: bool = result["isCrit"]
@@ -89,6 +88,7 @@ func Damage() -> void:
 	anim.play("Hit")
 	
 	if health <= 0:
+		levelController.AddXP(xp)
 		Kill()
 
 
@@ -104,6 +104,5 @@ func ResetAnimation() -> void:
 	
 	
 func Kill() -> void:
-	levelController.AddXP(xp)
 	canMove = false
 	anim.play("Death")
