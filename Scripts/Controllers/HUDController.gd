@@ -137,6 +137,7 @@ func _mouse_exited() -> void:
 
 
 func _on_increase_health_pressed() -> void:
+	SoundFx.play("key")
 	player.maxHealth += 1
 	levelController.UpgradeAbility("health")
 	increaseHealthLevel.text = str(levelController.abilityLevels["health"])
