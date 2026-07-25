@@ -1,8 +1,13 @@
 extends CharacterBody2D
+class_name Enemy
+
+const explosion: PackedScene = preload("res://Scenes/VFX/BloodSplat.scn")
+const floatingText: PackedScene = preload("res://Scenes/Utils/FloatingText.scn")
 
 @onready var hitbox: Area2D = $Hitbox
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var anim: AnimationPlayer = $AnimationPlayer
+@onready var blood: Node2D = $Blood
 @onready var player: Player = get_tree().get_first_node_in_group("player")
 @onready var hud: HUDController = get_tree().get_first_node_in_group("hud")
 @onready var levelController: Node = get_tree().get_first_node_in_group("level")
@@ -26,7 +31,7 @@ var attacking: bool = false
 var direction: Vector2 = Vector2.LEFT
 var canMove: bool = true
 var knockback: int = 10
-const floatingText: PackedScene = preload("res://Scenes/Utils/FloatingText.scn")
+var lastPosition: Vector2 = Vector2.ZERO
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -114,5 +119,14 @@ func ResetAnimation() -> void:
 	
 	
 func Kill() -> void:
+	# lastPosition = self.position
 	canMove = false
+	Explosion()
 	anim.play("Death")
+
+
+func Explosion() -> void:
+	var explode: GPUParticles2D = explosion.instantiate()
+	get_parent().add_child(explode)
+	explode.global_position = blood.global_position
+	explode.emitting = true
