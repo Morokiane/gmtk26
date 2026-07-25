@@ -4,6 +4,7 @@ signal xpChange
 signal upgradePointsChanged
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
+@onready var quest: Label = $Label
 
 var xp: int = 0
 var nextXP: int = 5
@@ -54,7 +55,7 @@ func AddXP(amount: int) -> void:
 	
 	if xp >= nextXP:
 		PlayerLevelUp()
-		
+
 	
 func PlayerLevelUp() -> void:
 	player.level += 1

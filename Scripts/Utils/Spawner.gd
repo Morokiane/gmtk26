@@ -23,7 +23,7 @@ func _ready() -> void:
 
 	enemyUnlocks = [
 		{"level": 0, "scene": enemyUn, "weight": 30},
-		{"level": 3, "scene": enemyDeux, "weight": 20},
+		{"level": 1, "scene": enemyDeux, "weight": 30},
 		{"level": 6, "scene": enemyTrois, "weight": 15},
 		{"level": 12, "scene": enemyQuatre, "weight": 10},
 		{"level": 20, "scene": enemyCinq, "weight": 5},

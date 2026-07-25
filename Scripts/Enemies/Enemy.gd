@@ -56,10 +56,10 @@ func SetLevel(level: int) -> void:
 	moveSpeed = baseMove * pow(moveGrowthRate, enemyLevel)
 
 
-func _on_hitbox_area_entered(area: Area2D) -> void:
-	if area.is_in_group("playerHitbox"):
-		canMove = false
-		anim.play("Explode")
+# func _on_hitbox_area_entered(area: Area2D) -> void:
+# 	if area.is_in_group("playerHitbox"):
+# 		canMove = false
+# 		anim.play("Explode")
 
 		
 func _on_hurtbox_area_entered(area: Area2D) -> void:
@@ -70,6 +70,7 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 
 		
 func Damage() -> void:
+	print("Bat took damage, health before: ", health)
 	var result: Dictionary = player.CalculateDamage()
 	var dmg: float = result["amount"]
 	var isCrit: bool = result["isCrit"]
