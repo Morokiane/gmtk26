@@ -1,11 +1,12 @@
 extends CharacterBody2D
 class_name Enemy
 
-const explosion: PackedScene = preload("res://Scenes/VFX/BloodSplat.scn")
+const particleBlood: PackedScene = preload("res://Scenes/VFX/BloodSplat.scn")
 const floatingText: PackedScene = preload("res://Scenes/Utils/FloatingText.scn")
 
 @onready var hitbox: Area2D = $Hitbox
 @onready var hurtbox: Area2D = $Hurtbox
+@onready var hurtboxColl: CollisionShape2D = $Hurtbox/Collision
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var blood: Node2D = $Blood
 @onready var player: Player = get_tree().get_first_node_in_group("player")
@@ -21,6 +22,7 @@ const floatingText: PackedScene = preload("res://Scenes/Utils/FloatingText.scn")
 @export var growthRate: float = 1.05
 @export var xp: int = 1
 @export var knockbackResist: int = 0
+@export var isKnockbackable: bool = true
 
 var health: float
 var damage: float
@@ -32,6 +34,7 @@ var direction: Vector2 = Vector2.LEFT
 var canMove: bool = true
 var knockback: int = 10
 var lastPosition: Vector2 = Vector2.ZERO
+
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: int = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -53,7 +56,8 @@ func _physics_process(delta: float) -> void:
 	if canMove:
 		move_and_slide()
 
-		
+
+
 func SetLevel(level: int) -> void:
 	enemyLevel = level
 	if (enemyLevel > 3):
@@ -66,7 +70,7 @@ func SetLevel(level: int) -> void:
 # func _on_hitbox_area_entered(area: Area2D) -> void:
 # 	if area.is_in_group("playerHitbox"):
 # 		canMove = false
-# 		anim.play("Explode")
+# 		anim.play("particles")
 
 		
 func _on_hurtbox_area_entered(area: Area2D) -> void:
@@ -93,16 +97,13 @@ func Damage() -> void:
 
 	instance.Start(str(formatString % dmg), isCrit)
 
-	if knockbackResist <= 0:
+	if isKnockbackable:
 		position.x = position.x + player.knockbackAmount
-	else:
-		knockbackResist -= 1
 
 	anim.play("Hit")
 	health -= dmg
 	
 	if health <= 0:
-		levelController.AddXP(xp)
 		Kill()
 
 
@@ -118,7 +119,7 @@ func ResetAnimation() -> void:
 
 
 func ResetAnimationKnockback() -> void:
-	if knockbackResist <= 0 && !attacking:
+	if isKnockbackable:
 		canMove = true
 		anim.play("Move")
 	else:
@@ -126,18 +127,22 @@ func ResetAnimationKnockback() -> void:
 	
 	
 func Kill() -> void:
-	# lastPosition = self.position
+	levelController.AddXP(xp)
+	hurtboxColl.set_deferred("disabled", true)
 	SoundFx.play("enemydie")
 	canMove = false
-	Explosion()
+	Blood()
 	anim.play("Death")
 
+	await anim.animation_finished
+	queue_free()
 
-func Explosion() -> void:
-	var explode: GPUParticles2D = explosion.instantiate()
-	get_parent().add_child(explode)
-	explode.global_position = blood.global_position
-	explode.emitting = true
+
+func Blood() -> void:
+	var particles: GPUParticles2D = particleBlood.instantiate()
+	get_parent().add_child(particles)
+	particles.global_position = blood.global_position
+	particles.emitting = true
 
 
 func SelfDestruct() -> void:

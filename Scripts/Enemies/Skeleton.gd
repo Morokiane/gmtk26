@@ -15,8 +15,8 @@ func Idle() -> void:
 func _on_player_detect_area_entered(area: Area2D) -> void:
 	if area.is_in_group("playerHitbox"):
 		attacking = true
-		timer.start()
 		canMove = false
+		timer.start()
 		anim.play("Attack 1")
 
 
@@ -26,3 +26,9 @@ func Kill() -> void:
 	# canMove = false
 	timer.stop()
 	# anim.play("Death")
+
+
+func _on_player_detect_area_exited(area: Area2D) -> void:
+	if area.is_in_group("playerHitbox"):
+		canMove = true
+		anim.play("Move")

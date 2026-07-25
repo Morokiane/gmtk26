@@ -144,12 +144,14 @@ func _on_increase_health_pressed() -> void:
 
 	
 func _on_increase_mana_pressed() -> void:
+	SoundFx.play("key")
 	player.maxMana += 1
 	levelController.UpgradeAbility("mana")
 	increaseManaLevel.text = str(levelController.abilityLevels["mana"])
 
 	
 func _on_health_regen_pressed() -> void:
+	SoundFx.play("key")
 	player.regenTimer.wait_time -= 1.0
 	player.regenTimer.start()
 	# regenNum.text = str(player.healthRegen)
@@ -158,13 +160,15 @@ func _on_health_regen_pressed() -> void:
 
 	
 func _on_increase_damage_pressed() -> void:
-	player.damage += 0.1
+	SoundFx.play("key")
+	player.damage += 1
 	damageNum.text = str(player.damage)
 	levelController.UpgradeAbility("damage")
 	increaseDamageLevel.text = str(levelController.abilityLevels["damage"])
 
 	
 func _on_attack_rate_pressed() -> void:
+	SoundFx.play("key")
 	player.attackTimer.wait_time -= 0.2
 	attackRateNum.text = str(player.attackTimer.wait_time)
 	levelController.UpgradeAbility("attackRate")
@@ -172,24 +176,30 @@ func _on_attack_rate_pressed() -> void:
 
 	
 func _on_crit_chance_pressed() -> void:
+	SoundFx.play("key")
 	player.critChance += 5.0
 	levelController.UpgradeAbility("critChance")
 	critChanceLevel.text = str(levelController.abilityLevels["critChance"])
+	critCNum.text = str(player.critChance, "%")
 
 	
 func _on_crit_damage_pressed() -> void:
+	SoundFx.play("key")
 	player.critDamage += 10.0
 	levelController.UpgradeAbility("critDamage")
 	critDamageLevel.text = str(levelController.abilityLevels["critDamage"])
+	critDNum.text = str(player.critDamage, "%")
 
 	
 func _on_block_chance_pressed() -> void:
+	SoundFx.play("key")
 	player.blockChance += 0.1
 	levelController.UpgradeAbility("blockChance")
 	blockChanceLevel.text = str(levelController.abilityLevels["blockChance"])
 
 
 func _on_knockback_pressed() -> void:
+	SoundFx.play("key")
 	player.knockbackAmount += 1
 	levelController.UpgradeAbility("knockback")
 	knockbackLevel.text = str(levelController.abilityLevels["knockback"])
@@ -201,7 +211,3 @@ func EnableUpgrade() -> void:
 	for ability in upgradeButtons:
 		var button: TextureButton = upgradeButtons[ability]
 		button.disabled = levelController.IsMaxed(ability) or not hasPoints
-
-
-func GameOver() -> void:
-	pass

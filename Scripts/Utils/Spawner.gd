@@ -37,7 +37,7 @@ func _ready() -> void:
 		{"level": 1, "scene": enemyDeux, "weight": 30},
 		{"level": 3, "scene": enemyTrois, "weight": 15},
 		{"level": 5, "scene": enemyQuatre, "weight": 10},
-		{"level": 7, "scene": enemyCinq, "weight": 5},
+		{"level": 7, "scene": enemyCinq, "weight": 10},
 		{"level": 9, "scene": enemySix, "weight": 2},
 	]
 
@@ -85,6 +85,11 @@ func HordeCleared() -> void:
 	currentHorde += 1
 	enemiesSpawnedThisHorde = 0
 	spawnEnemies = true
+
+	if currentHorde > 5:
+		timer.wait_time = max(spawnTime - (currentHorde * 0.1), 0.5)
+
+	print(timer.wait_time)
 
 
 func PickEnemy(level: int) -> PackedScene:

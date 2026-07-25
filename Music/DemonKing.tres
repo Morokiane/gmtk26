@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="OvaniSong" format=3 uid="uid://pf647e0r26hh"]
+
+[ext_resource type="AudioStream" uid="uid://d1g31286y870b" path="res://Music/Metal Vol3 Demon King Intensity 1.wav" id="1_bcqye"]
+[ext_resource type="Script" uid="uid://bdwqsmc63kryo" path="res://OvaniPlugin/OvaniSong.gd" id="1_r3sdw"]
+[ext_resource type="AudioStream" uid="uid://ckktst5ryaoee" path="res://Music/Metal Vol3 Demon King Intensity 2.wav" id="2_ekk7l"]
+[ext_resource type="AudioStream" uid="uid://uky5hlgplpq0" path="res://Music/Metal Vol3 Demon King Main.wav" id="3_kthha"]
+[ext_resource type="AudioStream" uid="uid://lw6wjedoxu0a" path="res://Music/Metal Vol3 Demon King Cut 30.wav" id="4_h1xw6"]
+[ext_resource type="AudioStream" uid="uid://bccssb10fllj6" path="res://Music/Metal Vol3 Demon King Cut 60.wav" id="5_6e7yy"]
+
+[resource]
+script = ExtResource("1_r3sdw")
+Intensity1 = ExtResource("1_bcqye")
+Intensity2 = ExtResource("2_ekk7l")
+Intensity3 = ExtResource("3_kthha")
+Loop30 = ExtResource("4_h1xw6")
+Loop60 = ExtResource("5_6e7yy")
+ReverbTail = 7.073
+metadata/_custom_type_script = "uid://bdwqsmc63kryo"

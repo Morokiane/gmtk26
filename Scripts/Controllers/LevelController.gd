@@ -63,7 +63,7 @@ func PlayerLevelUp() -> void:
 	xp = 0
 	nextXP = int(nextXP * growthRate)
 	upgradePoints += 1
-	print("Upgrade Points:", upgradePoints)
+	print("Upgrade Points: ", upgradePoints)
 	xpChange.emit()
 	upgradePointsChanged.emit()
 

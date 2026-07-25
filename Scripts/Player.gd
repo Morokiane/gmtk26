@@ -6,6 +6,7 @@ signal healthChanged
 @onready var levelController: Node = get_parent()
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var hitboxCol: CollisionShape2D = $Hitbox/CollisionShape2D
+@onready var hurtboxCol: CollisionShape2D = $Hurtbox/CollisionShape2D
 @onready var regenTimer: Timer = $RegenTimer
 @onready var attackTimer: Timer = $AttackTimer
 @onready var enemyDetector: Area2D = $EnemyDetect
@@ -70,7 +71,7 @@ func Damage() -> void:
 	currentHealth -= levelController.enemyDamage
 	anim.play("Hit")
 	print("Player health:", currentHealth)
-	# SoundFx.play("playerhit")
+	SoundFx.play("playerhit")
 	# Emit health change to the HUDController
 	healthChanged.emit()
 	
@@ -84,7 +85,7 @@ func CalculateDamage() -> Dictionary:
 	var finalDamage: float = damage
 	
 	if isCrit:
-		finalDamage *= 1.0 + (critDamage / 100.0)
+		finalDamage *= damage + (critDamage / 100.0)
 	
 	return {
 		"amount": finalDamage,
@@ -97,11 +98,14 @@ func Kill() -> void:
 	regenTimer.stop()
 	attackTimer.stop()
 	anim.play("Death")
-	levelController.visible = true
+	levelController.gameOver.visible = true
+	# hitboxCol.set_deferred("disabled", true)
+	hurtboxCol.set_deferred("disabled", true)
 
 
 func _on_regen_timer_timeout() -> void:
 	currentHealth = min(currentHealth + healthRegen, maxHealth)
+	print("Regened health: ", currentHealth)
 	healthChanged.emit()
 
 
