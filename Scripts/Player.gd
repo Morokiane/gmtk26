@@ -92,7 +92,10 @@ func CalculateDamage() -> Dictionary:
 
 
 func Kill() -> void:
+	regenTimer.stop()
+	attackTimer.stop()
 	anim.play("Death")
+	levelController.visible = true
 
 
 func _on_regen_timer_timeout() -> void:

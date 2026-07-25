@@ -4,6 +4,7 @@ signal xpChange
 signal upgradePointsChanged
 
 @onready var player: Player = get_tree().get_first_node_in_group("player")
+@onready var gameOver: Label = $GameOver
 @onready var quest: Label = $Quest
 
 @export var enemyDamage: int = 5
@@ -34,12 +35,13 @@ var maxLevels: Dictionary = {
 	"mana": -1,
 	"healthRegen": 10,
 	"damage": 20,
-	"attackRate": 20,
+	"attackRate": 9,
 	"critChance": 20,
 	"critDamage": 20,
 	"blockChance": 20,
 	"knockback": 20
 }
+
 
 func AddXP(amount: int) -> void:
 	xp += amount

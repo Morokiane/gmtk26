@@ -9,7 +9,7 @@ class_name HUDController
 @onready var description: Label = $DescriptionLabel
 @onready var levelNum: Label = $VBoxContainer/Level/Num
 @onready var damageNum: Label = $VBoxContainer/Damage/Num
-@onready var regenNum: Label = $VBoxContainer/HealthRegen/Num
+@onready var attackRateNum: Label = $VBoxContainer/AttackRate/Num
 @onready var critCNum: Label = $VBoxContainer/CritC/Num
 @onready var critDNum: Label = $VBoxContainer/CritD/Num
 
@@ -54,7 +54,7 @@ class_name HUDController
 func _ready() -> void:
 	hordesLeft.text = str(levelController.hordesLeft)
 	levelNum.text = str(player.level)
-	regenNum.text = str(player.healthRegen)
+	attackRateNum.text = str(player.attackRate)
 	damageNum.text = str(player.damage)
 	critCNum.text = str(player.critChance)
 	critDNum.text = str(player.critDamage)
@@ -151,7 +151,7 @@ func _on_increase_mana_pressed() -> void:
 func _on_health_regen_pressed() -> void:
 	player.regenTimer.wait_time -= 1.0
 	player.regenTimer.start()
-	regenNum.text = str(player.healthRegen)
+	# regenNum.text = str(player.healthRegen)
 	levelController.UpgradeAbility("healthRegen")
 	healthRegenLevel.text = str(levelController.abilityLevels["healthRegen"])
 
@@ -164,7 +164,8 @@ func _on_increase_damage_pressed() -> void:
 
 	
 func _on_attack_rate_pressed() -> void:
-	player.attackTimer.wait_time -= 0.1
+	player.attackTimer.wait_time -= 0.2
+	attackRateNum.text = str(player.attackTimer.wait_time)
 	levelController.UpgradeAbility("attackRate")
 	attackRateLevel.text = str(levelController.abilityLevels["attackRate"])
 
@@ -199,3 +200,7 @@ func EnableUpgrade() -> void:
 	for ability in upgradeButtons:
 		var button: TextureButton = upgradeButtons[ability]
 		button.disabled = levelController.IsMaxed(ability) or not hasPoints
+
+
+func GameOver() -> void:
+	pass

@@ -15,11 +15,13 @@ extends CharacterBody2D
 @export var moveGrowthRate: float = 1.2
 @export var growthRate: float = 1.05
 @export var xp: int = 1
+@export var knockbackResist: int = 0
 
 var health: float
 var damage: float
 var enemyLevel: int = 0
 var moveSpeed: float
+var attacking: bool = false
 
 var direction: Vector2 = Vector2.LEFT
 var canMove: bool = true
@@ -49,7 +51,7 @@ func _physics_process(delta: float) -> void:
 		
 func SetLevel(level: int) -> void:
 	enemyLevel = level
-	if (enemyLevel > 5):
+	if (enemyLevel > 3):
 		health = baseHealth * pow(healthGrowthRate, enemyLevel)
 
 	damage = baseDamage * pow(damageGrowthRate, enemyLevel)
@@ -83,9 +85,14 @@ func Damage() -> void:
 		formatString = "%0.0f"
 
 	instance.Start(str(formatString % dmg), isCrit)
-	position.x = position.x + player.knockbackAmount
+
+	if knockbackResist <= 0:
+		position.x = position.x + player.knockbackAmount
+	else:
+		knockbackResist -= 1
+		anim.play("Hit")
+
 	health -= dmg
-	anim.play("Hit")
 	
 	if health <= 0:
 		levelController.AddXP(xp)
@@ -99,8 +106,11 @@ func _on_hurtbox_body_entered(body: Node2D) -> void:
 
 # This should run from the end of the Hit animation
 func ResetAnimation() -> void:
-	canMove = true
-	anim.play("Move")
+	if knockbackResist <= 0 && !attacking:
+		canMove = true
+		anim.play("Move")
+	else:
+		anim.play("Attack 1")
 	
 	
 func Kill() -> void:

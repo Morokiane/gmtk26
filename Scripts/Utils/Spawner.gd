@@ -13,6 +13,7 @@ extends Node2D
 
 @export var enemiesPerHorde: int = 10
 @export var hordeCount: int = 5
+@export var canSpawn: bool = true
 
 @onready var levelController: Node = get_parent()
 @onready var timer: Timer = $Timer
@@ -34,14 +35,16 @@ func _ready() -> void:
 	enemyUnlocks = [
 		{"level": 0, "scene": enemyUn, "weight": 30},
 		{"level": 1, "scene": enemyDeux, "weight": 30},
-		{"level": 6, "scene": enemyTrois, "weight": 15},
-		{"level": 12, "scene": enemyQuatre, "weight": 10},
-		{"level": 20, "scene": enemyCinq, "weight": 5},
-		{"level": 25, "scene": enemySix, "weight": 2},
+		{"level": 3, "scene": enemyTrois, "weight": 15},
+		{"level": 5, "scene": enemyQuatre, "weight": 10},
+		{"level": 7, "scene": enemyCinq, "weight": 5},
+		{"level": 9, "scene": enemySix, "weight": 2},
 	]
 
 	currentHorde = 1
-	timer.start()
+
+	if canSpawn:
+		timer.start()
 
 
 func _on_timer_timeout() -> void:
