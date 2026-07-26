@@ -108,7 +108,7 @@ func Kill() -> void:
 	attackTimer.stop()
 	anim.play("Death")
 	levelController.gameOver.visible = true
-	# hitboxCol.set_deferred("disabled", true)
+	hitboxCol.set_deferred("disabled", true)
 	hurtboxCol.set_deferred("disabled", true)
 
 
