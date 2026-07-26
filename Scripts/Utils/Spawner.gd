@@ -89,8 +89,6 @@ func HordeCleared() -> void:
 	if currentHorde > 5:
 		timer.wait_time = max(spawnTime - (currentHorde * 0.1), 0.5)
 
-	print(timer.wait_time)
-
 
 func PickEnemy(level: int) -> PackedScene:
 	var unlocked: Array = []
