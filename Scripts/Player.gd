@@ -4,6 +4,7 @@ class_name Player
 signal healthChanged
 
 @onready var levelController: Node = get_parent()
+@onready var cam: Camera2D = get_node("../Camera2D")
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var hitboxCol: CollisionShape2D = $Hitbox/CollisionShape2D
 @onready var hurtboxCol: CollisionShape2D = $Hurtbox/CollisionShape2D
@@ -11,7 +12,7 @@ signal healthChanged
 @onready var attackTimer: Timer = $AttackTimer
 @onready var enemyDetector: Area2D = $EnemyDetect
 @onready var rayCast: RayCast2D = $RayCast2D
-
+##Stats
 @export var maxHealth: int = 100
 @export var maxMana: int = 30
 @export var attackRate: float
@@ -21,7 +22,7 @@ signal healthChanged
 @export var healthRegen: float = 1
 @export var damage: float
 @export var armureMitigation: int
-@export var blockChance: float
+@export var hitChance: float = 90.0
 @export var knockbackAmount: int
 
 var currentHealth: float
@@ -29,6 +30,7 @@ var canAttack: bool = true
 var level: int = 0
 var xp: int
 var enemyInRange: bool = false
+var attackWillHit: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -58,6 +60,7 @@ func _physics_process(_delta: float) -> void:
 
 func Attack() -> void:
 	canAttack = false
+	attackWillHit = randf() * 100.0 < hitChance
 	anim.play("Attack 1")
 	attackTimer.start()
 
@@ -68,6 +71,7 @@ func ResetAttack() -> void:
 
 	
 func Damage() -> void:
+	cam.shake(0.5,90,1)
 	currentHealth -= levelController.enemyDamage
 	anim.play("Hit")
 	print("Player health:", currentHealth)
@@ -83,13 +87,18 @@ func Damage() -> void:
 func CalculateDamage() -> Dictionary:
 	var isCrit: bool = randf() * 100.0 < critChance
 	var finalDamage: float = damage
+	var isMiss: bool = !attackWillHit
 	
 	if isCrit:
 		finalDamage *= damage + (critDamage / 100.0)
 	
+	if isMiss:
+		finalDamage = 0
+	
 	return {
 		"amount": finalDamage,
-		"isCrit": isCrit
+		"isCrit": isCrit,
+		"isMiss": isMiss
 	}
 
 

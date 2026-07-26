@@ -8,7 +8,7 @@ class_name HUDController
 # Stats
 @onready var description: Label = $DescriptionLabel
 @onready var levelNum: Label = $VBoxContainer/Level/Num
-@onready var damageNum: Label = $VBoxContainer/Damage/Num
+@onready var hitChanceNum: Label = $VBoxContainer/HitChance/Num
 @onready var attackRateNum: Label = $VBoxContainer/AttackRate/Num
 @onready var critCNum: Label = $VBoxContainer/CritC/Num
 @onready var critDNum: Label = $VBoxContainer/CritD/Num
@@ -21,7 +21,7 @@ class_name HUDController
 @onready var attackRateLevel: Label = $GridContainer/AttackRate/Label
 @onready var critChanceLevel: Label = $GridContainer/CritChance/Label
 @onready var critDamageLevel: Label = $GridContainer/CritDamage/Label
-@onready var blockChanceLevel: Label = $GridContainer/BlockChance/Label
+@onready var hitChanceLevel: Label = $GridContainer/HitChance/Label
 @onready var knockbackLevel: Label = $GridContainer/Knockback/Label
 
 #Buttons
@@ -32,7 +32,7 @@ class_name HUDController
 @onready var attackRate: TextureButton = $GridContainer/AttackRate
 @onready var critChance: TextureButton = $GridContainer/CritChance
 @onready var critDamage: TextureButton = $GridContainer/CritDamage
-@onready var blockChance: TextureButton = $GridContainer/BlockChance
+@onready var hitChance: TextureButton = $GridContainer/HitChance
 @onready var knockback: TextureButton = $GridContainer/Knockback
 @onready var xpBar: TextureProgressBar = $XPBar
 @onready var hpBar: TextureProgressBar = $HPBar
@@ -47,7 +47,7 @@ class_name HUDController
 	"attackRate": attackRate,
 	"critChance": critChance,
 	"critDamage": critDamage,
-	"blockChance": blockChance,
+	"hitChance": hitChance,
 	"knockback": knockback
 }
 
@@ -55,7 +55,7 @@ func _ready() -> void:
 	hordesLeft.text = str(levelController.hordesLeft)
 	levelNum.text = str(player.level)
 	attackRateNum.text = str(player.attackRate)
-	damageNum.text = str(player.damage)
+	hitChanceNum.text = str(player.hitChance)
 	critCNum.text = str(player.critChance)
 	critDNum.text = str(player.critDamage)
 
@@ -92,6 +92,7 @@ func OnXPChanged() -> void:
 	levelNum.text = str(player.level)
 	critCNum.text = str(player.critChance,"%")
 	critDNum.text = str(player.critDamage,"%")
+	hitChanceNum.text = str(player.hitChance,"%")
 	xpBar.max_value = levelController.nextXP
 	xpBar.value = levelController.xp
 
@@ -124,8 +125,8 @@ func _on_crit_damage_mouse_entered() -> void:
 	description.text = "Crit Damage"
 
 	
-func _on_block_chance_mouse_entered() -> void:
-	description.text = "Block Chance"
+func _on_hit_chance_mouse_entered() -> void:
+	description.text = "Increase Hit Chance"
 
 
 func _on_knockback_mouse_entered() -> void:
@@ -162,7 +163,6 @@ func _on_health_regen_pressed() -> void:
 func _on_increase_damage_pressed() -> void:
 	SoundFx.play("key")
 	player.damage += 1
-	damageNum.text = str(player.damage)
 	levelController.UpgradeAbility("damage")
 	increaseDamageLevel.text = str(levelController.abilityLevels["damage"])
 
@@ -177,7 +177,7 @@ func _on_attack_rate_pressed() -> void:
 	
 func _on_crit_chance_pressed() -> void:
 	SoundFx.play("key")
-	player.critChance += 5.0
+	player.critChance += 10.0
 	levelController.UpgradeAbility("critChance")
 	critChanceLevel.text = str(levelController.abilityLevels["critChance"])
 	critCNum.text = str(player.critChance, "%")
@@ -191,11 +191,12 @@ func _on_crit_damage_pressed() -> void:
 	critDNum.text = str(player.critDamage, "%")
 
 	
-func _on_block_chance_pressed() -> void:
+func _on_hit_chance_pressed() -> void:
 	SoundFx.play("key")
-	player.blockChance += 0.1
-	levelController.UpgradeAbility("blockChance")
-	blockChanceLevel.text = str(levelController.abilityLevels["blockChance"])
+	player.hitChance += 2.0
+	levelController.UpgradeAbility("hitChance")
+	hitChanceLevel.text = str(levelController.abilityLevels["hitChance"])
+	hitChanceNum.text = str(player.hitChance, "%")
 
 
 func _on_knockback_pressed() -> void:

@@ -10,10 +10,16 @@ config_version=5
 
 [application]
 
-config/name="gmtk26"
+config/name="Zero Hour Siege - gmtk26"
+config/description="Entry for GMTK 26 - Countdown."
+config/version="0.1"
 run/main_scene="uid://dicq471yjniu3"
 config/features=PackedStringArray("4.7", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/use_filter=false
+boot_splash/image="uid://c7ap1dj6ejwjp"
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=2000
 
 [autoload]
 

@@ -84,6 +84,7 @@ func Damage() -> void:
 	var result: Dictionary = player.CalculateDamage()
 	var dmg: float = result["amount"]
 	var isCrit: bool = result["isCrit"]
+	var isMiss: bool = result["isMiss"]
 	
 	var instance: Node2D = floatingText.instantiate()
 	get_tree().get_first_node_in_group("foreground").add_child(instance)
@@ -91,11 +92,16 @@ func Damage() -> void:
 	
 	SoundFx.play("hurt")
 	
-	var formatString: String = "%0.1f"
-	if round(dmg) == dmg:
-		formatString = "%0.0f"
+	var displayText: String
+	if isMiss:
+		displayText = "Missed"
+	else:
+		var formatString: String = "%0.1f"
+		if round(dmg) == dmg:
+			formatString = "%0.0f"
+		displayText = str(formatString % dmg)
 
-	instance.Start(str(formatString % dmg), isCrit)
+	instance.Start(displayText, isCrit)
 
 	if isKnockbackable:
 		position.x = position.x + player.knockbackAmount

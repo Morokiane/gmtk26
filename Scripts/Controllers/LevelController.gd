@@ -28,7 +28,7 @@ var abilityLevels: Dictionary = {
 	"attackRate": 0,
 	"critChance": 0,
 	"critDamage": 0,
-	"blockChance": 0,
+	"hitChance": 0,
 	"knockback": 0
 }
 
@@ -38,9 +38,9 @@ var maxLevels: Dictionary = {
 	"healthRegen": 10,
 	"damage": 20,
 	"attackRate": 9,
-	"critChance": 20,
+	"critChance": 9,
 	"critDamage": 20,
-	"blockChance": 20,
+	"hitChance": 5,
 	"knockback": 20
 }
 
